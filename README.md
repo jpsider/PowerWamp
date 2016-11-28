@@ -1,5 +1,5 @@
 # PowerWamp
-![Alt text](https://github.com/BelayTechnologies/PowerWamp/blob/master/z_Images/PowerWamp_NoBg.png "PowerWamp Icon")  
+![Alt text](https://github.com/jpsider/PowerWamp/blob/master/z_Images/PowerWamp_NoBg.png "PowerWamp Icon")  
 ## Overview  
 This powershell module includes command to Start/Stop/Restart Wamp Services.  
 The module also contains functions to Connect/disconnect to MySql databases.  
