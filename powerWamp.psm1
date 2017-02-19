@@ -5,39 +5,7 @@
 # |_|   \___/ \_/\_/ \___|_|    \_/\_/ \__,_|_| |_| |_| .__/ 
 #                                                     |_|
 #=======================================================================================
-function Connect-MySQL(){
-	<#
-		.SYNOPSIS
-			A powershell function to connect to MySQL server.
-		.DESCRIPTION
-			Creates a MySQL server connection.
-		.PARAMETER MySQLUsername MySQLPassword MySQLDatabase MySQLServer
-			A valid SQL query is required.
-		.EXAMPLE
-			$MySQLconn = Connect-MySQL -MySQLUsername root -MySQLPassword "" -MySQLDatabase Device -MySQLServer 127.0.0.1
-		.NOTES
-			Additional information about the function or script.
-	#>
-	param(
-		[Parameter(Mandatory=$true)]
-			[string]$MySQLUsername,
-			[string]$MySQLPassword,
-			[string]$MySQLDatabase,
-			[string]$MySQLServer
-	)
-	# Create the connection string
-	$ConnectionString = "server=" + $MySQLServer + ";port=3306;uid=" + $MySQLUserName + ";pwd=" + $MySQLPassword + ";database="+$MySQLDatabase
-	# Load MySQL .NET Connector Objects
-	[void][System.Reflection.Assembly]::LoadWithPartialName("MySql.Data")
-	$Connection = New-Object MySql.Data.MySqlClient.MySqlConnection
-	$Connection.ConnectionString = $ConnectionString
-	# Open Connection
-	$Connection.Open()
-	return $Connection
-}
-
-#=======================================================================================
-function Run-MySQLQuery(){
+function Invoke-MySQLQuery(){
 	<#
 		.SYNOPSIS
 			A powershell function to run MySQL Queries.
@@ -48,26 +16,79 @@ function Run-MySQLQuery(){
 		.EXAMPLE
 			Query the DB for rows of information and setting that as an Object.
 			$query = "select Testcase_name,Testcase_Status from test_cases"	
-			$Data = @(Run-SQLCommand $Query $MySQLconn)
+			$Data = @(-Query $query -MySQLUsername root -MySQLPassword "" -MySQLDatabase summitrts -MySQLServer localhost)
 		.EXAMPLE	
 			Updating database row(s) 	
 			$query = "update test_cases set Testcase_name = '$somevalue' where testcase_id = 1"	
-			Run-SQLCommand $Query $MySQLconn
+			Invoke-MySQLQuery -Query $query -MySQLUsername root -MySQLPassword "" -MySQLDatabase summitrts -MySQLServer localhost
 		.NOTES
-			Additional information about the function or script.
+			No additional notes.
 	#>
 	param(
 		[Parameter(Mandatory=$true)]
 			[string]$Query,
-			[string]$Connection
+		[Parameter(Mandatory=$true)]
+			[string]$MySQLUsername,
+			[string]$MySQLPassword,
+			[string]$MySQLDatabase,
+			[string]$MySQLServer			
 	)
+	$ConnectionString = "server=" + $MySQLServer + ";port=3306;uid=" + $MySQLUserName + ";pwd=" + $MySQLPassword + ";database="+$MySQLDatabase
+	# Load MySQL .NET Connector Objects
+	[void][System.Reflection.Assembly]::LoadWithPartialName("MySql.Data")
+	$Connection = New-Object MySql.Data.MySqlClient.MySqlConnection
+	$Connection.ConnectionString = $ConnectionString
+	# Open Connection
+	$Connection.Open()
+
 	# Create command object
 	$Command = New-Object MySql.Data.MySqlClient.MySqlCommand($Query, $Connection)
 	$DataAdapter = New-Object MySql.Data.MySqlClient.MySqlDataAdapter($Command)
 	$DataSet = New-Object System.Data.DataSet
 	$RecordCount = $dataAdapter.Fill($dataSet, "data")
+	#Disconnect from MySQL
+	Disconnect-MySQL $Connection
 	#return the data
 	return $DataSet.Tables[0]
+}
+
+#=======================================================================================
+function Invoke-MySQLInsert(){
+	<#
+		.SYNOPSIS
+			A powershell function to insert data into MySQL and return the ID of the last inserted item.
+		.DESCRIPTION
+			Executes the MySQL insert.
+		.PARAMETER query
+			A valid SQL query is required.
+		.EXAMPLE	
+			Inserting row(s) 	
+			$query = "insert into rts_properties (name,value) VALUES ('SAMPLE_DATA_NAME','SAMPLE_VALUE')"	
+			$LastItemID = @(Invoke-MySQLInsert -Query $query -MySQLUsername root -MySQLPassword "" -MySQLDatabase summitrts -MySQLServer localhost)[1]
+		.NOTES
+			no additional notes.
+	#>
+	param(
+		[Parameter (Mandatory = $True)]
+		$Query
+	)
+	
+	# Create the connection string
+	$ConnectionString = "server=" + $MySQLHost + ";port=3306;uid=" + $MySQLAdminUserName + ";pwd=" + $MySQLAdminPassword + ";database="+$MySQLDatabase
+	# Load MySQL .NET Connector Objects
+	[void][System.Reflection.Assembly]::LoadWithPartialName("MySql.Data")
+	$Connection = New-Object MySql.Data.MySqlClient.MySqlConnection
+	$Connection.ConnectionString = $ConnectionString
+	# Open Connection
+	$Connection.Open()
+	
+	# Create command object
+	$Command = New-Object MySql.Data.MySqlClient.MySqlCommand($Query, $Connection)
+    $Command.ExecuteNonQuery()
+	#Disconnect from MySQL
+	Disconnect-MySQL $Connection
+	#return the LastInsertedId
+    return $Command.LastInsertedId
 }
 
 #=======================================================================================
@@ -82,7 +103,7 @@ function Disconnect-MySQL(){
 	.EXAMPLE
 		Disconnect-MySQL $MySQLconn
 	.NOTES
-		Additional information about the function or script.
+		No additional notes.
 	#>
 	param(
 		[Parameter(Mandatory=$true)]
@@ -93,7 +114,7 @@ function Disconnect-MySQL(){
 }
 
 #=======================================================================================
-function Nudge-Wamp(){
+function Invoke-Wamp(){
 	<#
 	.SYNOPSIS
 		A quick function to to Start/Stop/Restart Wamp Components.
