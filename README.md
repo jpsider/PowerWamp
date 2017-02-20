@@ -9,7 +9,15 @@ Powershell version 5.0 (It may work with older versions, but its not tested.)
 MySQL connector 6.9.X https://dev.mysql.com/downloads/connector/net/6.9.html  
 
 ## Installation  
+### Download the file and run the following line:  
 Import-Module \<path>\PowerWamp.psm1  
+
+### Copy and paste these lines. c:\temp needs to exist.  
+      $webclient = New-Object System.Net.WebClient  
+      $filepath = "C:\temp\powerwamp.psm1"  
+      $url = "https://raw.github.com/jpsider/PowerWamp/master/powerWamp.psm1"  
+      $webclient.DownloadFile($url,$filepath)  
+      Import-module $filepath  
 
 ## Available Functions 
 Connect-MySQL - Creates a MySQL connection   
