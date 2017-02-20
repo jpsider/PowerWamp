@@ -11,23 +11,26 @@ MySQL connector 6.9.X https://dev.mysql.com/downloads/connector/net/6.9.html
 ## Installation  
 Import-Module \<path>\PowerWamp.psm1  
 
-## Available Functions  
+## Available Functions 
+Connect-MySQL - Creates a MySQL connection   
 Disconnect-MySQL - Disconnect from MySQL  
 Invoke-MySQLQuery - Perform a Query  
 Invoke-MySQLInsert - Perform an insert and retrieve the last inserted ID  
 Invoke-Wamp - Start/Stop/Restart Wamp services  
 
 ## Examples:  
-### Query the DB for rows of information and setting that as an Object:  
-      $query = "select Testcase_name,Testcase_Status from test_cases"  
-      $Data = @(Invoke-MySQLQuery $Query $MySQLconn)  
-### Updating database row(s):    
-      $query = "update test_cases set Testcase_name = '$somevalue' where testcase_id = 1"   
-      Invoke-MySQLQuery $Query $MySQLconn  
-### Inserting row(s) 	
-	  $query = "insert into rts_properties (name,value) VALUES ('SAMPLE_DATA_NAME','SAMPLE_VALUE')"	
-	  $LastItemID = @(Invoke-MySQLInsert -Query $query -MySQLUsername root -MySQLPassword "" -MySQLDatabase summitrts -MySQLServer localhost)[1]	  
+### Connect to MySQL:
+	  $MySQLconn = (Connect-MySQL $ConnectionString)  
 ### Disconnect:  
       Disconnect-MySQL $connection
+### Query the DB for rows of information and setting that as an Object:  
+      $query = "select Testcase_name,Testcase_Status from test_cases"  
+      $Data = @(Invoke-MySQLQuery -Query $query -MySQLUsername root -MySQLPassword "" -MySQLDatabase summitrts -MySQLServer localhost)  
+### Updating database row(s):    
+      $query = "update test_cases set Testcase_name = '$somevalue' where testcase_id = 1"   
+      Invoke-MySQLQuery -Query $query -MySQLUsername root -MySQLPassword "" -MySQLDatabase summitrts -MySQLServer localhost  
+### Inserting row(s) 	
+	  $query = "insert into rts_properties (name,val) VALUES ('SAMPLE_DATA_NAME','SAMPLE_VALUE')"	
+	  $LastItemID = @(Invoke-MySQLInsert -Query $query -MySQLUsername root -MySQLPassword "" -MySQLDatabase summitrts -MySQLServer localhost)[1]	  
 ### Stop Apache Service:  
       Invoke-Wamp -action Stop -Service apache

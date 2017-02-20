@@ -1,3 +1,4 @@
+#=======================================================================================
 #  ____                      __        __                    
 # |  _ \ _____      _____ _ _\ \      / /_ _ _ __ ___  _ __  
 # | |_) / _ \ \ /\ / / _ \ '__\ \ /\ / / _` | '_ ` _ \| '_ \ 
@@ -5,7 +6,42 @@
 # |_|   \___/ \_/\_/ \___|_|    \_/\_/ \__,_|_| |_| |_| .__/ 
 #                                                     |_|
 #=======================================================================================
-function Invoke-MySQLQuery(){
+Function Connect-MySQL() {
+	<#
+		.SYNOPSIS
+			A powershell function to connect to a MySQL Database.
+		.DESCRIPTION
+			Executes the Query.
+		.PARAMETER ConnectionString
+			A valid MySQL string is required.
+		.EXAMPLE
+			$MySQLconn = (Connect-MySQL $ConnectionString)
+		.NOTES
+			No additional notes.
+	#>
+	param(
+		[Parameter(Mandatory=$true)]
+			[string]$ConnectionString			
+	)
+	try {
+		# Load MySQL .NET Connector Objects
+		[void][System.Reflection.Assembly]::LoadWithPartialName("MySql.Data")
+		$Connection = New-Object MySql.Data.MySqlClient.MySqlConnection
+		$Connection.ConnectionString = $ConnectionString
+		# Open Connection
+		$Connection.Open()
+		return $Connection
+	}
+	Catch {
+	    $ErrorMessage = $_.Exception.Message
+    	$FailedItem = $_.Exception.ItemName		
+		write-host "Connection Error:" $ErrorMessage $FailedItem
+		BREAK
+	}
+}
+                                                    
+#=======================================================================================
+Function Invoke-MySQLQuery() {
 	<#
 		.SYNOPSIS
 			A powershell function to run MySQL Queries.
@@ -13,6 +49,14 @@ function Invoke-MySQLQuery(){
 			Executes the Query.
 		.PARAMETER query
 			A valid SQL query is required.
+		.PARAMETER MySQLUsername
+			A valid MySQL username is required.
+		.PARAMETER MySQLPassword
+			A valid MySQL password is required.			
+		.PARAMETER MySQLDatabase
+			A valid MySQL Database is required.
+		.PARAMETER MySQLServer
+			A valid MySQL Server is required.	
 		.EXAMPLE
 			Query the DB for rows of information and setting that as an Object.
 			$query = "select Testcase_name,Testcase_Status from test_cases"	
@@ -33,27 +77,32 @@ function Invoke-MySQLQuery(){
 			[string]$MySQLDatabase,
 			[string]$MySQLServer			
 	)
-	$ConnectionString = "server=" + $MySQLServer + ";port=3306;uid=" + $MySQLUserName + ";pwd=" + $MySQLPassword + ";database="+$MySQLDatabase
-	# Load MySQL .NET Connector Objects
-	[void][System.Reflection.Assembly]::LoadWithPartialName("MySql.Data")
-	$Connection = New-Object MySql.Data.MySqlClient.MySqlConnection
-	$Connection.ConnectionString = $ConnectionString
-	# Open Connection
-	$Connection.Open()
+	try {
+		$ConnectionString = "server=" + $MySQLServer + ";port=3306;uid=" + $MySQLUserName + ";pwd=" + $MySQLPassword + ";database="+$MySQLDatabase
+		$Connection = (Connect-MySQL $ConnectionString)
 
-	# Create command object
-	$Command = New-Object MySql.Data.MySqlClient.MySqlCommand($Query, $Connection)
-	$DataAdapter = New-Object MySql.Data.MySqlClient.MySqlDataAdapter($Command)
-	$DataSet = New-Object System.Data.DataSet
-	$RecordCount = $dataAdapter.Fill($dataSet, "data")
-	#Disconnect from MySQL
-	Disconnect-MySQL $Connection
-	#return the data
-	return $DataSet.Tables[0]
+		# Create command object
+		$Command = New-Object MySql.Data.MySqlClient.MySqlCommand($Query, $Connection)
+		$DataAdapter = New-Object MySql.Data.MySqlClient.MySqlDataAdapter($Command)
+		$DataSet = New-Object System.Data.DataSet
+		$RecordCount = $dataAdapter.Fill($dataSet, "data")
+		#return the data
+		return $DataSet.Tables[0]
+	}
+	Catch {
+	    $ErrorMessage = $_.Exception.Message
+    	$FailedItem = $_.Exception.ItemName		
+		write-host "Query Error:" $ErrorMessage $FailedItem
+		BREAK		
+	}
+	Finally{
+		#Disconnect from MySQL
+		Disconnect-MySQL $Connection
+	}
 }
 
 #=======================================================================================
-function Invoke-MySQLInsert(){
+Function Invoke-MySQLInsert() {
 	<#
 		.SYNOPSIS
 			A powershell function to insert data into MySQL and return the ID of the last inserted item.
@@ -61,38 +110,54 @@ function Invoke-MySQLInsert(){
 			Executes the MySQL insert.
 		.PARAMETER query
 			A valid SQL query is required.
+		.PARAMETER MySQLUsername
+			A valid MySQL username is required.
+		.PARAMETER MySQLPassword
+			A valid MySQL password is required.			
+		.PARAMETER MySQLDatabase
+			A valid MySQL Database is required.
+		.PARAMETER MySQLServer
+			A valid MySQL Server is required.			
 		.EXAMPLE	
 			Inserting row(s) 	
-			$query = "insert into rts_properties (name,value) VALUES ('SAMPLE_DATA_NAME','SAMPLE_VALUE')"	
+			$query = "insert into rts_properties (name,val) VALUES ('SAMPLE_DATA_NAME','SAMPLE_VALUE')"	
 			$LastItemID = @(Invoke-MySQLInsert -Query $query -MySQLUsername root -MySQLPassword "" -MySQLDatabase summitrts -MySQLServer localhost)[1]
 		.NOTES
 			no additional notes.
 	#>
 	param(
-		[Parameter (Mandatory = $True)]
-		$Query
+		[Parameter(Mandatory=$true)]
+			[string]$Query,
+		[Parameter(Mandatory=$true)]
+			[string]$MySQLUsername,
+			[string]$MySQLPassword,
+			[string]$MySQLDatabase,
+			[string]$MySQLServer			
 	)
+	try {
+		$ConnectionString = "server=" + $MySQLServer + ";port=3306;uid=" + $MySQLUserName + ";pwd=" + $MySQLPassword + ";database="+$MySQLDatabase
+		$Connection = (Connect-MySQL $ConnectionString)
 	
-	# Create the connection string
-	$ConnectionString = "server=" + $MySQLHost + ";port=3306;uid=" + $MySQLAdminUserName + ";pwd=" + $MySQLAdminPassword + ";database="+$MySQLDatabase
-	# Load MySQL .NET Connector Objects
-	[void][System.Reflection.Assembly]::LoadWithPartialName("MySql.Data")
-	$Connection = New-Object MySql.Data.MySqlClient.MySqlConnection
-	$Connection.ConnectionString = $ConnectionString
-	# Open Connection
-	$Connection.Open()
-	
-	# Create command object
-	$Command = New-Object MySql.Data.MySqlClient.MySqlCommand($Query, $Connection)
-    $Command.ExecuteNonQuery()
-	#Disconnect from MySQL
-	Disconnect-MySQL $Connection
-	#return the LastInsertedId
-    return $Command.LastInsertedId
+		# Create command object
+		$Command = New-Object MySql.Data.MySqlClient.MySqlCommand($Query, $Connection)
+		$Command.ExecuteNonQuery()
+		#return the LastInsertedId
+		return $Command.LastInsertedId
+	}
+	Catch {
+	    $ErrorMessage = $_.Exception.Message
+    	$FailedItem = $_.Exception.ItemName		
+		write-host "Query Error:" $ErrorMessage $FailedItem
+		BREAK		
+	}
+	Finally{
+		#Disconnect from MySQL
+		Disconnect-MySQL $Connection
+	}
 }
 
 #=======================================================================================
-function Disconnect-MySQL(){
+Function Disconnect-MySQL(){
 	<#
 	.SYNOPSIS
 		A quick function to drop a MySQL connection.
@@ -107,14 +172,22 @@ function Disconnect-MySQL(){
 	#>
 	param(
 		[Parameter(Mandatory=$true)]
-			[string]$Connection
+			$Connection
 	)
-	# Disconnect from MySQL Database
-	$Connection.Close()
+	try {
+		# Disconnect from MySQL Database
+		$Connection.Close()
+	}
+	Catch {
+	    $ErrorMessage = $_.Exception.Message
+    	$FailedItem = $_.Exception.ItemName		
+		write-host "Query Error:" $ErrorMessage $FailedItem
+		BREAK			
+	}
 }
 
 #=======================================================================================
-function Invoke-Wamp(){
+Function Invoke-Wamp() {
 	<#
 	.SYNOPSIS
 		A quick function to to Start/Stop/Restart Wamp Components.
@@ -125,7 +198,7 @@ function Invoke-Wamp(){
 	.PARAMETER Service
 		Please specify a valid Service
 	.EXAMPLE
-		Nudge-Wamp -action Stop -Service apache
+		Invoke-Wamp -action Stop -Service apache
 	.NOTES
 		Additional information about the function or script.
 	#>
@@ -144,51 +217,59 @@ function Invoke-Wamp(){
 		$wampService = 'wampmysql*'
 	} 
 
-	#Determine Service Status
-	$Status = (Get-Service $wampService).status
-	#perform Action
-	if($action -eq 'start'){
-		if ($Status -eq 'Running') {
-			write-host "The Service: '$wampService' is running, taking no action."
-			break
-		} elseif ($Status -eq 'Stopped') {
-			write-host "Starting Service: '$wampService'."
-			Start-Service $wampService -confirm:$false
-			Break
-		} else {
-			write-host "Unable to determine Service Status:'$status'"
-			break
-		}
-	} elseif ($action -eq 'stop') {
-		if ($Status -eq 'Running') {
-			write-host "Stopping Service: '$wampService'."
-			Stop-Service $wampService -confirm:$false
-			break
-		} elseif ($Status -eq 'Stopped') {
-			write-host "The Service: '$wampService' is Stopped, taking no action."
-			Break
-		} else {
-			write-host "Unable to determine Service Status:'$status'"
-			break
-		}
-	} elseif ($action -eq 'restart') {
-		if ($Status -eq 'Running') {
-			write-host "Restarting Service: '$wampService'."
-			Restart-Service $wampService -confirm:$false
-			break
-		} elseif ($Status -eq 'Stopped') {
-			write-host "The Service: '$wampService' is Stopped, taking no action."
-			Break
-		} else {
-			write-host "Unable to determine Service Status:'$status'"
-			break
-		}
-	} 
+	try {
+		#Determine Service Status
+		$Status = (Get-Service $wampService).status
+		#perform Action
+		if($action -eq 'start'){
+			if ($Status -eq 'Running') {
+				write-host "The Service: '$wampService' is running, taking no action."
+				BREAK
+			} elseif ($Status -eq 'Stopped') {
+				write-host "Starting Service: '$wampService'."
+				Start-Service $wampService -confirm:$false
+				BREAK
+			} else {
+				write-host "Unable to determine Service Status:'$status'"
+				BREAK
+			}
+		} elseif ($action -eq 'stop') {
+			if ($Status -eq 'Running') {
+				write-host "Stopping Service: '$wampService'."
+				Stop-Service $wampService -confirm:$false
+				BREAK
+			} elseif ($Status -eq 'Stopped') {
+				write-host "The Service: '$wampService' is Stopped, taking no action."
+				BREAK
+			} else {
+				write-host "Unable to determine Service Status:'$status'"
+				BREAK
+			}
+		} elseif ($action -eq 'restart') {
+			if ($Status -eq 'Running') {
+				write-host "Restarting Service: '$wampService'."
+				Restart-Service $wampService -confirm:$false
+				BREAK
+			} elseif ($Status -eq 'Stopped') {
+				write-host "The Service: '$wampService' is Stopped, taking no action."
+				BREAK
+			} else {
+				write-host "Unable to determine Service Status:'$status'"
+				BREAK
+			}
+		} 
+	}
+	Catch {
+	    $ErrorMessage = $_.Exception.Message
+    	$FailedItem = $_.Exception.ItemName		
+		write-host "Error:" $ErrorMessage $FailedItem
+		BREAK		
+	}
 }
-#=======================================================================================
-#    _  _  _____                    ____       _             
-#  _| || ||_   _|__  __ _ _ __ ___ | __ )  ___| | __ _ _   _ 
-# |_  ..  _|| |/ _ \/ _` | '_ ` _ \|  _ \ / _ \ |/ _` | | | |
-# |_      _|| |  __/ (_| | | | | | | |_) |  __/ | (_| | |_| |
-#   |_||_|  |_|\___|\__,_|_| |_| |_|____/ \___|_|\__,_|\__, |
-#                                                      |___/ 
+#=============================================================================================
+#  ___                 _                _         _                        _   _              
+# |_ _|_ ____   _____ | | _____        / \  _   _| |_ ___  _ __ ___   __ _| |_(_) ___  _ __   
+#  | || '_ \ \ / / _ \| |/ / _ \_____ / _ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \  
+#  | || | | \ V / (_) |   <  __/_____/ ___ \ |_| | || (_) | | | | | | (_| | |_| | (_) | | | | 
+# |___|_| |_|\_/ \___/|_|\_\___|    /_/   \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_| 
+#============================================================================================= 
