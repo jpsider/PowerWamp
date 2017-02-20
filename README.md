@@ -18,6 +18,15 @@ Invoke-MySQLQuery - Perform a Query
 Invoke-MySQLInsert - Perform an insert and retrieve the last inserted ID  
 Invoke-Wamp - Start/Stop/Restart Wamp services  
 
+## Executing query Connection Detail options  
+### With Connection String  
+	  $query = "update test_cases set Testcase_name = '$somevalue' where testcase_id = 1"  
+	  $MyConnectionString = "server=localhost;port=3306;uid=root;pwd=;database=summitrts"  
+	  Invoke-MySQLQuery -Query $query -ConnectionString $MyConnectionString  
+### With individual Items  
+	  $query = "update test_cases set Testcase_name = '$somevalue' where testcase_id = 1"  	
+	  Invoke-MySQLQuery -Query $query -MySQLUsername root -MySQLPassword "" -MySQLDatabase summitrts -MySQLServer localhost  
+
 ## Examples:  
 ### Connect to MySQL:
 	  $MySQLconn = (Connect-MySQL $ConnectionString)  

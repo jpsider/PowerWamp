@@ -49,6 +49,8 @@ Function Invoke-MySQLQuery() {
 			Executes the Query.
 		.PARAMETER query
 			A valid SQL query is required.
+		.PARAMETER ConnectionString
+			A valid MySQL connection String is required.
 		.PARAMETER MySQLUsername
 			A valid MySQL username is required.
 		.PARAMETER MySQLPassword
@@ -56,7 +58,17 @@ Function Invoke-MySQLQuery() {
 		.PARAMETER MySQLDatabase
 			A valid MySQL Database is required.
 		.PARAMETER MySQLServer
-			A valid MySQL Server is required.	
+			A valid MySQL Server is required.
+		.EXAMPLE
+			Query the DB for rows of information and setting that as an Object.
+			$query = "select Testcase_name,Testcase_Status from test_cases"	
+			$MyConnectionString = "server=localhost;port=3306;uid=root;pwd=;database=summitrts" 
+			$Data = @(-Query $query -ConnectionString $MyConnectionString)
+		.EXAMPLE	
+			Updating database row(s) 	
+			$query = "update test_cases set Testcase_name = '$somevalue' where testcase_id = 1"	
+			$MyConnectionString = "server=localhost;port=3306;uid=root;pwd=;database=summitrts"
+			Invoke-MySQLQuery -Query $query -ConnectionString $MyConnectionString	
 		.EXAMPLE
 			Query the DB for rows of information and setting that as an Object.
 			$query = "select Testcase_name,Testcase_Status from test_cases"	
@@ -68,17 +80,26 @@ Function Invoke-MySQLQuery() {
 		.NOTES
 			No additional notes.
 	#>
+	[CmdletBinding(DefaultParameterSetName='ByConnectionString')]
 	param(
-		[Parameter(Mandatory=$true)]
+		[Parameter(Mandatory=$true,ParameterSetName='ByConnectionString')]
+		[Parameter(Mandatory=$true,ParameterSetName='ByItems')]
 			[string]$Query,
-		[Parameter(Mandatory=$true)]
+		[Parameter(Mandatory=$true,ParameterSetName='ByConnectionString')]
+			[string]$ConnectionString,
+		[Parameter(Mandatory=$true,ParameterSetName='ByItems')]
 			[string]$MySQLUsername,
+		[Parameter(Mandatory=$true,ParameterSetName='ByItems')]
 			[string]$MySQLPassword,
+		[Parameter(Mandatory=$true,ParameterSetName='ByItems')]
 			[string]$MySQLDatabase,
+		[Parameter(Mandatory=$true,ParameterSetName='ByItems')]			
 			[string]$MySQLServer			
 	)
 	try {
-		$ConnectionString = "server=" + $MySQLServer + ";port=3306;uid=" + $MySQLUserName + ";pwd=" + $MySQLPassword + ";database="+$MySQLDatabase
+		if ($ConnectionString -eq "") {
+			$ConnectionString = "server=" + $MySQLServer + ";port=3306;uid=" + $MySQLUserName + ";pwd=" + $MySQLPassword + ";database="+$MySQLDatabase
+		}
 		$Connection = (Connect-MySQL $ConnectionString)
 
 		# Create command object
@@ -121,17 +142,29 @@ Function Invoke-MySQLInsert() {
 		.EXAMPLE	
 			Inserting row(s) 	
 			$query = "insert into rts_properties (name,val) VALUES ('SAMPLE_DATA_NAME','SAMPLE_VALUE')"	
+			$MyConnectionString = "server=localhost;port=3306;uid=root;pwd=;database=summitrts"
+			$LastItemID = @(Invoke-MySQLInsert -Query $query -ConnectionString $MyConnectionString)[1]
+		.EXAMPLE	
+			Inserting row(s) 	
+			$query = "insert into rts_properties (name,val) VALUES ('SAMPLE_DATA_NAME','SAMPLE_VALUE')"	
 			$LastItemID = @(Invoke-MySQLInsert -Query $query -MySQLUsername root -MySQLPassword "" -MySQLDatabase summitrts -MySQLServer localhost)[1]
 		.NOTES
 			no additional notes.
 	#>
+	[CmdletBinding(DefaultParameterSetName='ByConnectionString')]
 	param(
-		[Parameter(Mandatory=$true)]
+		[Parameter(Mandatory=$true,ParameterSetName='ByConnectionString')]
+		[Parameter(Mandatory=$true,ParameterSetName='ByItems')]
 			[string]$Query,
-		[Parameter(Mandatory=$true)]
+		[Parameter(Mandatory=$true,ParameterSetName='ByConnectionString')]
+			[string]$ConnectionString,
+		[Parameter(Mandatory=$true,ParameterSetName='ByItems')]
 			[string]$MySQLUsername,
+		[Parameter(Mandatory=$true,ParameterSetName='ByItems')]
 			[string]$MySQLPassword,
+		[Parameter(Mandatory=$true,ParameterSetName='ByItems')]
 			[string]$MySQLDatabase,
+		[Parameter(Mandatory=$true,ParameterSetName='ByItems')]			
 			[string]$MySQLServer			
 	)
 	try {
