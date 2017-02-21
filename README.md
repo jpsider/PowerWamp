@@ -33,7 +33,7 @@ Invoke-Wamp - Start/Stop/Restart Wamp services
 	  Invoke-MySQLQuery -Query $query -ConnectionString $MyConnectionString  
 ### With individual Items  
 	  $query = "update test_cases set Testcase_name = '$somevalue' where testcase_id = 1"  	
-	  Invoke-MySQLQuery -Query $query -MySQLUsername root -MySQLPassword "" -MySQLDatabase summitrts -MySQLServer localhost  
+	  Invoke-MySQLQuery -Query $query -MySQLUsername root -MySQLPassword " " -MySQLDatabase summitrts -MySQLServer localhost  
 
 ## Examples:  
 ### Connect to MySQL:
@@ -48,6 +48,6 @@ Invoke-Wamp - Start/Stop/Restart Wamp services
       Invoke-MySQLQuery -Query $query -MySQLUsername root -MySQLPassword "" -MySQLDatabase summitrts -MySQLServer localhost  
 ### Inserting row(s) 	
 	  $query = "insert into rts_properties (name,val) VALUES ('SAMPLE_DATA_NAME','SAMPLE_VALUE')"	
-	  $LastItemID = @(Invoke-MySQLInsert -Query $query -MySQLUsername root -MySQLPassword "" -MySQLDatabase summitrts -MySQLServer localhost)[1]	  
+	  $LastItemID = @(Invoke-MySQLInsert -Query $query -MySQLUsername root -MySQLPassword " " -MySQLDatabase summitrts -MySQLServer localhost)[1]	  
 ### Stop Apache Service:  
       Invoke-Wamp -action Stop -Service apache

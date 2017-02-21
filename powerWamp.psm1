@@ -72,7 +72,7 @@ Function Invoke-MySQLQuery() {
 		.EXAMPLE
 			Query the DB for rows of information and setting that as an Object.
 			$query = "select Testcase_name,Testcase_Status from test_cases"	
-			$Data = @(-Query $query -MySQLUsername root -MySQLPassword "" -MySQLDatabase summitrts -MySQLServer localhost)
+			$Data = @(Invoke-MySQLQuery -Query $query -MySQLUsername root -MySQLPassword "" -MySQLDatabase summitrts -MySQLServer localhost)
 		.EXAMPLE	
 			Updating database row(s) 	
 			$query = "update test_cases set Testcase_name = '$somevalue' where testcase_id = 1"	
@@ -147,7 +147,7 @@ Function Invoke-MySQLInsert() {
 		.EXAMPLE	
 			Inserting row(s) 	
 			$query = "insert into rts_properties (name,val) VALUES ('SAMPLE_DATA_NAME','SAMPLE_VALUE')"	
-			$LastItemID = @(Invoke-MySQLInsert -Query $query -MySQLUsername root -MySQLPassword "" -MySQLDatabase summitrts -MySQLServer localhost)[1]
+			$LastItemID = @(Invoke-MySQLInsert -Query $query -MySQLUsername root -MySQLPassword " " -MySQLDatabase summitrts -MySQLServer localhost)[1]
 		.NOTES
 			no additional notes.
 	#>
@@ -168,7 +168,9 @@ Function Invoke-MySQLInsert() {
 			[string]$MySQLServer			
 	)
 	try {
-		$ConnectionString = "server=" + $MySQLServer + ";port=3306;uid=" + $MySQLUserName + ";pwd=" + $MySQLPassword + ";database="+$MySQLDatabase
+		if ($ConnectionString -eq "") {
+			$ConnectionString = "server=" + $MySQLServer + ";port=3306;uid=" + $MySQLUserName + ";pwd=" + $MySQLPassword + ";database="+$MySQLDatabase
+		}
 		$Connection = (Connect-MySQL $ConnectionString)
 	
 		# Create command object
