@@ -131,6 +131,8 @@ Function Invoke-MySQLInsert() {
 			Executes the MySQL insert.
 		.PARAMETER query
 			A valid SQL query is required.
+		.PARAMETER ConnectionString
+			A valid connection string is required.
 		.PARAMETER MySQLUsername
 			A valid MySQL username is required.
 		.PARAMETER MySQLPassword
@@ -185,7 +187,7 @@ Function Invoke-MySQLInsert() {
 		write-host "Query Error:" $ErrorMessage $FailedItem
 		BREAK		
 	}
-	Finally{
+	Finally {
 		#Disconnect from MySQL
 		Disconnect-MySQL $Connection
 	}
