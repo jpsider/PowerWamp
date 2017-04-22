@@ -90,7 +90,7 @@ Function Invoke-MySQLQuery() {
 		[Parameter(Mandatory=$true,ParameterSetName='ByItems')]
 			[string]$MySQLUsername,
 		[Parameter(Mandatory=$true,ParameterSetName='ByItems')]
-			[string]$MySQLPassword,
+			[System.Security.SecureString]$MySQLPassword,
 		[Parameter(Mandatory=$true,ParameterSetName='ByItems')]
 			[string]$MySQLDatabase,
 		[Parameter(Mandatory=$true,ParameterSetName='ByItems')]			
@@ -98,7 +98,9 @@ Function Invoke-MySQLQuery() {
 	)
 	try {
 		if ($ConnectionString -eq "") {
-			$ConnectionString = "server=" + $MySQLServer + ";port=3306;uid=" + $MySQLUserName + ";pwd=" + $MySQLPassword + ";database="+$MySQLDatabase
+			$BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($MySQLPassword)
+			$UnsecurePassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
+			$ConnectionString = "server=" + $MySQLServer + ";port=3306;uid=" + $MySQLUserName + ";pwd=" + $UnsecurePassword + ";database="+$MySQLDatabase
 		}
 		$Connection = (Connect-MySQL $ConnectionString)
 
@@ -163,7 +165,7 @@ Function Invoke-MySQLInsert() {
 		[Parameter(Mandatory=$true,ParameterSetName='ByItems')]
 			[string]$MySQLUsername,
 		[Parameter(Mandatory=$true,ParameterSetName='ByItems')]
-			[string]$MySQLPassword,
+			[System.Security.SecureString]$MySQLPassword,
 		[Parameter(Mandatory=$true,ParameterSetName='ByItems')]
 			[string]$MySQLDatabase,
 		[Parameter(Mandatory=$true,ParameterSetName='ByItems')]			
@@ -171,7 +173,9 @@ Function Invoke-MySQLInsert() {
 	)
 	try {
 		if ($ConnectionString -eq "") {
-			$ConnectionString = "server=" + $MySQLServer + ";port=3306;uid=" + $MySQLUserName + ";pwd=" + $MySQLPassword + ";database="+$MySQLDatabase
+			$BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($MySQLPassword)
+			$UnsecurePassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)			
+			$ConnectionString = "server=" + $MySQLServer + ";port=3306;uid=" + $MySQLUserName + ";pwd=" + $UnsecurePassword + ";database="+$MySQLDatabase
 		}
 		$Connection = (Connect-MySQL $ConnectionString)
 	
