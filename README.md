@@ -31,7 +31,7 @@ This project was generated using [Kevin Marquette](http://kevinmarquette.github.
 This powershell module includes command to Start/Stop/Restart Wamp Services.  
 The module also contains functions to execute Queries/Inserts for MySql databases. 
 
-![Build status](https://ci.appveyor.com/api/github/webhook?id=vulgh26eak4n97kj/branch/master?svg=true)   
+![Build status](https://ci.appveyor.com/api/projects/status/github/jpsider/powerwamp?branch=master&svg=true)  
 
 ## Requirements  
 Powershell version 5.0 (It may work with older versions, but its not tested.)  
