@@ -1,8 +1,37 @@
 # PowerWamp
+
+Module to Control WampServer
+
+## GitPitch PitchMe presentation
+
+* [gitpitch.com/jpsider/PowerWamp](https://gitpitch.com/jpsider/PowerWamp)
+
+## Getting Started
+
+Install from the PSGallery and Import the module
+
+    Install-Module PowerWamp
+    Import-Module PowerWamp
+
+
+## More Information
+
+For more information
+
+* [PowerWamp.readthedocs.io](http://PowerWamp.readthedocs.io)
+* [github.com/jpsider/PowerWamp](https://github.com/jpsider/PowerWamp)
+* [jpsider.github.io](https://jpsider.github.io)
+
+
+This project was generated using [Kevin Marquette](http://kevinmarquette.github.io)'s [Full Module Plaster Template](https://github.com/KevinMarquette/PlasterTemplates/tree/master/FullModuleTemplate).
+
+# PowerWamp
 ![Alt text](https://github.com/jpsider/PowerWamp/blob/master/z_Images/PowerWamp_NoBg.png "PowerWamp Icon")  
 ## Overview  
 This powershell module includes command to Start/Stop/Restart Wamp Services.  
-The module also contains functions to execute Queries/Inserts for MySql databases.    
+The module also contains functions to execute Queries/Inserts for MySql databases. 
+
+![Build status](https://ci.appveyor.com/api/projects/status/github/jpsider/powerwamp?branch=master&svg=true)
 
 ## Requirements  
 Powershell version 5.0 (It may work with older versions, but its not tested.)  
