@@ -68,7 +68,7 @@ Function Invoke-MySQLQuery
         $Command = New-Object MySql.Data.MySqlClient.MySqlCommand($Query, $Connection)
         $DataAdapter = New-Object MySql.Data.MySqlClient.MySqlDataAdapter($Command)
         $DataSet = New-Object System.Data.DataSet
-        $RecordCount = $dataAdapter.Fill($dataSet, "data")
+        $dataAdapter.Fill($dataSet, "data") > $null
         #return the data
         return $DataSet.Tables[0]
     }
