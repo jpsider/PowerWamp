@@ -30,7 +30,7 @@ Function Connect-MySQL
     {
         $ErrorMessage = $_.Exception.Message
         $FailedItem = $_.Exception.ItemName		
-        write-host "Connection Error:" $ErrorMessage $FailedItem
+        Write-Error "Connection Error: $ErrorMessage $FailedItem"
         BREAK
     }
 }

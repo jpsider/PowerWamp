@@ -41,18 +41,18 @@ Function Invoke-Wamp
         {
             if ($Status -eq 'Running')
             {
-                write-host "The Service: '$wampService' is running, taking no action."
+                Write-Output "The Service: '$wampService' is running, taking no action."
                 BREAK
             }
             elseif ($Status -eq 'Stopped')
             {
-                write-host "Starting Service: '$wampService'."
+                Write-Output "Starting Service: '$wampService'."
                 Start-Service $wampService -confirm:$false
                 BREAK
             }
             else
             {
-                write-host "Unable to determine Service Status:'$status'"
+                Write-Output "Unable to determine Service Status:'$status'"
                 BREAK
             }
         }
@@ -60,18 +60,18 @@ Function Invoke-Wamp
         {
             if ($Status -eq 'Running')
             {
-                write-host "Stopping Service: '$wampService'."
+                Write-Output "Stopping Service: '$wampService'."
                 Stop-Service $wampService -confirm:$false
                 BREAK
             }
             elseif ($Status -eq 'Stopped')
             {
-                write-host "The Service: '$wampService' is Stopped, taking no action."
+                Write-Output "The Service: '$wampService' is Stopped, taking no action."
                 BREAK
             }
             else
             {
-                write-host "Unable to determine Service Status:'$status'"
+                Write-Output "Unable to determine Service Status:'$status'"
                 BREAK
             }
         }
@@ -79,18 +79,18 @@ Function Invoke-Wamp
         {
             if ($Status -eq 'Running')
             {
-                write-host "Restarting Service: '$wampService'."
+                Write-Output "Restarting Service: '$wampService'."
                 Restart-Service $wampService -confirm:$false
                 BREAK
             }
             elseif ($Status -eq 'Stopped')
             {
-                write-host "The Service: '$wampService' is Stopped, taking no action."
+                Write-Output "The Service: '$wampService' is Stopped, taking no action."
                 BREAK
             }
             else
             {
-                write-host "Unable to determine Service Status:'$status'"
+                Write-Output "Unable to determine Service Status:'$status'"
                 BREAK
             }
         } 
@@ -99,7 +99,7 @@ Function Invoke-Wamp
     {
         $ErrorMessage = $_.Exception.Message
         $FailedItem = $_.Exception.ItemName		
-        write-host "Error:" $ErrorMessage $FailedItem
+        Write-Error "Error: $ErrorMessage $FailedItem"
         BREAK		
     }
 }

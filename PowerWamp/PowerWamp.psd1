@@ -12,7 +12,7 @@
 RootModule = 'PowerWamp.psm1'
 
 # Version number of this module.
-ModuleVersion = '3.0.0'
+ModuleVersion = '3.0.1'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -30,10 +30,10 @@ CompanyName = 'Unknown'
 Copyright = '(c) 2017 Justin Sider. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'Module to Control WampServer'
+Description = 'Module Invoke MySQL queries and Control Wamp Services'
 
 # Minimum version of the Windows PowerShell engine required by this module
-# PowerShellVersion = ''
+# PowerShellVersion = '5'
 
 # Name of the Windows PowerShell host required by this module
 # PowerShellHostName = ''
@@ -72,13 +72,13 @@ Description = 'Module to Control WampServer'
 FunctionsToExport = @('Invoke-MySQLInsert','Invoke-MySQLQuery','Invoke-Wamp')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = '*'
+# CmdletsToExport = '*'
 
 # Variables to export from this module
 VariablesToExport = '*'
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = '*'
+# AliasesToExport = '*'
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
@@ -114,7 +114,7 @@ PrivateData = @{
 } # End of PrivateData hashtable
 
 # HelpInfo URI of this module
-# HelpInfoURI = ''
+# HelpInfoURI = 'http://www.invoke-automation.blog'
 
 # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
 # DefaultCommandPrefix = ''

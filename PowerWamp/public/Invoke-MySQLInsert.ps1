@@ -65,7 +65,7 @@ Function Invoke-MySQLInsert
     {
         $ErrorMessage = $_.Exception.Message
         $FailedItem = $_.Exception.ItemName		
-        write-host "Query Error:" $ErrorMessage $FailedItem
+        Write-Error "Query Error: $ErrorMessage $FailedItem"
         BREAK		
     }
     Finally
