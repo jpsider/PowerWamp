@@ -4,7 +4,7 @@ Function Disconnect-MySQL
 	.SYNOPSIS
 		A quick function to drop a MySQL connection.
 	.DESCRIPTION
-		disconnects a specified MySQL connection.
+		Disconnects a specified MySQL connection.
 	.PARAMETER  connection
 		Please Specify a valid connection.
 	.EXAMPLE
