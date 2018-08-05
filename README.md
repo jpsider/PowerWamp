@@ -2,6 +2,14 @@
 
 Module to Control WampServer
 
+[![Build status](https://ci.appveyor.com/api/projects/status/github/jpsider/PowerWamp?branch=master&svg=true)](https://ci.appveyor.com/project/JustinSider/PowerWamp)
+[![PS Gallery](https://img.shields.io/badge/install-PS%20Gallery-blue.svg)](https://www.powershellgallery.com/packages/PowerWamp/)
+[![Coverage Status](https://coveralls.io/repos/github/jpsider/PowerWamp/badge.svg?branch=master)](https://coveralls.io/github/jpsider/PowerWamp?branch=master)
+
+## Docs  
+
+[Help](https://github.com/jpsider/PowerWamp/tree/master/docs)
+
 ## GitPitch PitchMe presentation
 
 * [gitpitch.com/jpsider/PowerWamp](https://gitpitch.com/jpsider/PowerWamp)
@@ -18,9 +26,7 @@ Install from the PSGallery and Import the module
 
 For more information
 
-* [PowerWamp.readthedocs.io](http://PowerWamp.readthedocs.io)
 * [github.com/jpsider/PowerWamp](https://github.com/jpsider/PowerWamp)
-* [jpsider.github.io](https://jpsider.github.io)
 
 
 This project was generated using [Kevin Marquette](http://kevinmarquette.github.io)'s [Full Module Plaster Template](https://github.com/KevinMarquette/PlasterTemplates/tree/master/FullModuleTemplate).
