@@ -14,7 +14,7 @@ Function Connect-MySQL
 	#>
     param(
         [Parameter(Mandatory = $true)]
-        [string]$ConnectionString			
+        [string]$ConnectionString
     )
     try
     {
@@ -29,7 +29,7 @@ Function Connect-MySQL
     Catch
     {
         $ErrorMessage = $_.Exception.Message
-        $FailedItem = $_.Exception.ItemName		
+        $FailedItem = $_.Exception.ItemName
         Write-Error "Connection Error: $ErrorMessage $FailedItem"
         BREAK
     }

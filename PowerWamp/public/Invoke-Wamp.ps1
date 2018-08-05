@@ -30,7 +30,7 @@ Function Invoke-Wamp
     elseif ($service -eq 'mysql')
     {
         $wampService = 'wampmysql*'
-    } 
+    }
 
     try
     {
@@ -93,13 +93,13 @@ Function Invoke-Wamp
                 Write-Output "Unable to determine Service Status:'$status'"
                 BREAK
             }
-        } 
+        }
     }
     Catch
     {
         $ErrorMessage = $_.Exception.Message
-        $FailedItem = $_.Exception.ItemName		
+        $FailedItem = $_.Exception.ItemName
         Write-Error "Error: $ErrorMessage $FailedItem"
-        BREAK		
+        BREAK
     }
 }

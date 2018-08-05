@@ -12,19 +12,19 @@ Function Invoke-MySQLInsert
 		.PARAMETER MySQLUsername
 			A valid MySQL username is required.
 		.PARAMETER MySQLPassword
-			A valid MySQL password is required.			
+			A valid MySQL password is required.
 		.PARAMETER MySQLDatabase
 			A valid MySQL Database is required.
 		.PARAMETER MySQLServer
-			A valid MySQL Server is required.			
-		.EXAMPLE	
-			Inserting row(s) 	
-			$query = "insert into rts_properties (name,val) VALUES ('SAMPLE_DATA_NAME','SAMPLE_VALUE')"	
+			A valid MySQL Server is required.
+		.EXAMPLE
+			Inserting row(s)
+			$query = "insert into rts_properties (name,val) VALUES ('SAMPLE_DATA_NAME','SAMPLE_VALUE')"
 			$MyConnectionString = "server=localhost;port=3306;uid=root;pwd=;database=summitrts"
 			$LastItemID = @(Invoke-MySQLInsert -Query $query -ConnectionString $MyConnectionString)[1]
-		.EXAMPLE	
-			Inserting row(s) 	
-			$query = "insert into rts_properties (name,val) VALUES ('SAMPLE_DATA_NAME','SAMPLE_VALUE')"	
+		.EXAMPLE
+			Inserting row(s)
+			$query = "insert into rts_properties (name,val) VALUES ('SAMPLE_DATA_NAME','SAMPLE_VALUE')"
 			$LastItemID = @(Invoke-MySQLInsert -Query $query -MySQLUsername root -MySQLPassword " " -MySQLDatabase summitrts -MySQLServer localhost)[1]
 		.NOTES
 			no additional notes.
@@ -42,19 +42,18 @@ Function Invoke-MySQLInsert
         [System.Security.SecureString]$MySQLPassword,
         [Parameter(Mandatory = $true, ParameterSetName = 'ByItems')]
         [string]$MySQLDatabase,
-        [Parameter(Mandatory = $true, ParameterSetName = 'ByItems')]			
-        [string]$MySQLServer			
+        [Parameter(Mandatory = $true, ParameterSetName = 'ByItems')]
+        [string]$MySQLServer
     )
     try
     {
         if ($ConnectionString -eq "")
         {
             $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($MySQLPassword)
-            $UnsecurePassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)			
+            $UnsecurePassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
             $ConnectionString = "server=" + $MySQLServer + ";port=3306;uid=" + $MySQLUserName + ";pwd=" + $UnsecurePassword + ";database=" + $MySQLDatabase
         }
         $Connection = (Connect-MySQL $ConnectionString)
-	
         # Create command object
         $Command = New-Object MySql.Data.MySqlClient.MySqlCommand($Query, $Connection)
         $Command.ExecuteNonQuery()
@@ -64,9 +63,9 @@ Function Invoke-MySQLInsert
     Catch
     {
         $ErrorMessage = $_.Exception.Message
-        $FailedItem = $_.Exception.ItemName		
+        $FailedItem = $_.Exception.ItemName
         Write-Error "Query Error: $ErrorMessage $FailedItem"
-        BREAK		
+        BREAK
     }
     Finally
     {

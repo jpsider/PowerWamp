@@ -2,7 +2,7 @@
 
 environment:
   Coveralls_Key:
-    secure: HPZ31s3k5Ci9tZTi2gemJY6HvwGCq5xD8z+yFfKlO2Fr2o/KDoV2VrwGztnCXNnv
+    secure: c6zy15AX5j2ztIxpcV8No50Sr/TjFYgcX6m6GCyuwIZuzczPVPZGo8LGCvHM2J+2
   NugetApiKey:
     secure: iR4vlP9ilby8LTXXncpzN5bwnE7pMBD5pHDDSfA7qnU+/N6RY1GSxMgb78gV104x
 

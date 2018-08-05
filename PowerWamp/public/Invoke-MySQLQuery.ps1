@@ -12,28 +12,28 @@ Function Invoke-MySQLQuery
 		.PARAMETER MySQLUsername
 			A valid MySQL username is required.
 		.PARAMETER MySQLPassword
-			A valid MySQL password is required.			
+			A valid MySQL password is required.
 		.PARAMETER MySQLDatabase
 			A valid MySQL Database is required.
 		.PARAMETER MySQLServer
 			A valid MySQL Server is required.
 		.EXAMPLE
 			Query the DB for rows of information and setting that as an Object.
-			$query = "select Testcase_name,Testcase_Status from test_cases"	
-			$MyConnectionString = "server=localhost;port=3306;uid=root;pwd=;database=summitrts" 
-			$Data = @(Invoke-MySQLQuery -Query $query -ConnectionString $MyConnectionString)
-		.EXAMPLE	
-			Updating database row(s) 	
-			$query = "update test_cases set Testcase_name = '$somevalue' where testcase_id = 1"	
+			$query = "select Testcase_name,Testcase_Status from test_cases"
 			$MyConnectionString = "server=localhost;port=3306;uid=root;pwd=;database=summitrts"
-			Invoke-MySQLQuery -Query $query -ConnectionString $MyConnectionString	
+			$Data = @(Invoke-MySQLQuery -Query $query -ConnectionString $MyConnectionString)
+		.EXAMPLE
+			Updating database row(s)
+			$query = "update test_cases set Testcase_name = '$somevalue' where testcase_id = 1"
+			$MyConnectionString = "server=localhost;port=3306;uid=root;pwd=;database=summitrts"
+			Invoke-MySQLQuery -Query $query -ConnectionString $MyConnectionString
 		.EXAMPLE
 			Query the DB for rows of information and setting that as an Object.
-			$query = "select Testcase_name,Testcase_Status from test_cases"	
+			$query = "select Testcase_name,Testcase_Status from test_cases"
 			$Data = @(Invoke-MySQLQuery -Query $query -MySQLUsername root -MySQLPassword "" -MySQLDatabase summitrts -MySQLServer localhost)
-		.EXAMPLE	
-			Updating database row(s) 	
-			$query = "update test_cases set Testcase_name = '$somevalue' where testcase_id = 1"	
+		.EXAMPLE
+			Updating database row(s)
+			$query = "update test_cases set Testcase_name = '$somevalue' where testcase_id = 1"
 			Invoke-MySQLQuery -Query $query -MySQLUsername root -MySQLPassword "" -MySQLDatabase summitrts -MySQLServer localhost
 		.NOTES
 			No additional notes.
@@ -51,8 +51,8 @@ Function Invoke-MySQLQuery
         [System.Security.SecureString]$MySQLPassword,
         [Parameter(Mandatory = $true, ParameterSetName = 'ByItems')]
         [string]$MySQLDatabase,
-        [Parameter(Mandatory = $true, ParameterSetName = 'ByItems')]			
-        [string]$MySQLServer			
+        [Parameter(Mandatory = $true, ParameterSetName = 'ByItems')]
+        [string]$MySQLServer
     )
     try
     {
@@ -75,9 +75,9 @@ Function Invoke-MySQLQuery
     Catch
     {
         $ErrorMessage = $_.Exception.Message
-        $FailedItem = $_.Exception.ItemName		
+        $FailedItem = $_.Exception.ItemName
         Write-Error "Query Error: $ErrorMessage $FailedItem"
-        BREAK		
+        BREAK
     }
     Finally
     {

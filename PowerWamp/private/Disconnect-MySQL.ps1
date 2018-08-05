@@ -24,8 +24,8 @@ Function Disconnect-MySQL
     Catch
     {
         $ErrorMessage = $_.Exception.Message
-        $FailedItem = $_.Exception.ItemName		
+        $FailedItem = $_.Exception.ItemName
         Write-Error "Query Error: $ErrorMessage $FailedItem"
-        BREAK			
+        BREAK
     }
 }
