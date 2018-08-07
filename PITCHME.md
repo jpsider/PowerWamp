@@ -19,4 +19,3 @@ For more information
 
 * [PowerWamp.readthedocs.io](http://PowerWamp.readthedocs.io)
 * [github.com/jpsider/PowerWamp](https://github.com/jpsider/PowerWamp)
-* [jpsider.github.io](https://jpsider.github.io)

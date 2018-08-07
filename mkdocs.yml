@@ -1,11 +1,13 @@
 site_name: PowerWamp
 repo_url: https://github.com/jpsider/PowerWamp
 theme: readthedocs
+edit_uri: edit/master/docs/
 pages:
 - Home: index.md
 - PowerWamp Basics:
   - What is PowerWamp: about.md
   - Quick Start: Quick-Start-Installation-and-Example.md
-- Basic Commands:
-- Examples:
-- Acknowledgements: acknowledgements.md
+- Public Functions:
+  - Invoke-MySQLInsert: Invoke-MySQLInsert.md
+  - Invoke-MySQLQuery: Invoke-MySQLQuery.md
+  - Invoke-Wamp: Invoke-Wamp.md
