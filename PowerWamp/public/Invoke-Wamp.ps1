@@ -34,9 +34,9 @@ Function Invoke-Wamp
 
     try
     {
-        #Determine Service Status
+        # Determine Service Status
         $Status = (Get-Service $wampService).status
-        #perform Action
+        # perform Action
         if ($action -eq 'start')
         {
             if ($Status -eq 'Running')
