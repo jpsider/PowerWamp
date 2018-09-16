@@ -42,18 +42,15 @@ Function Invoke-Wamp
             if ($Status -eq 'Running')
             {
                 Write-Output "The Service: '$wampService' is running, taking no action."
-                BREAK
             }
             elseif ($Status -eq 'Stopped')
             {
                 Write-Output "Starting Service: '$wampService'."
                 Start-Service $wampService -confirm:$false
-                BREAK
             }
             else
             {
                 Write-Output "Unable to determine Service Status:'$status'"
-                BREAK
             }
         }
         elseif ($action -eq 'stop')
@@ -62,17 +59,14 @@ Function Invoke-Wamp
             {
                 Write-Output "Stopping Service: '$wampService'."
                 Stop-Service $wampService -confirm:$false
-                BREAK
             }
             elseif ($Status -eq 'Stopped')
             {
                 Write-Output "The Service: '$wampService' is Stopped, taking no action."
-                BREAK
             }
             else
             {
                 Write-Output "Unable to determine Service Status:'$status'"
-                BREAK
             }
         }
         elseif ($action -eq 'restart')
@@ -81,17 +75,14 @@ Function Invoke-Wamp
             {
                 Write-Output "Restarting Service: '$wampService'."
                 Restart-Service $wampService -confirm:$false
-                BREAK
             }
             elseif ($Status -eq 'Stopped')
             {
                 Write-Output "The Service: '$wampService' is Stopped, taking no action."
-                BREAK
             }
             else
             {
                 Write-Output "Unable to determine Service Status:'$status'"
-                BREAK
             }
         }
     }
@@ -100,6 +91,5 @@ Function Invoke-Wamp
         $ErrorMessage = $_.Exception.Message
         $FailedItem = $_.Exception.ItemName
         Write-Error "Error: $ErrorMessage $FailedItem"
-        BREAK
     }
 }
